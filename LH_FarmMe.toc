@@ -6,7 +6,7 @@
 ## IconTexture: Interface\AddOns\LH_Tweaks\Icon.tga
 ## Notes: Track item farming goals with compact progress bars.
 ## Author: LH_FarmMe
-## Version: 1.0.0
+## Version: 1.0.1
 ## SavedVariablesPerCharacter: LH_FarmMeDB
 
 LH_FarmMe.lua

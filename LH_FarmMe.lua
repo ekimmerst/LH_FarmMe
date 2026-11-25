@@ -40,10 +40,41 @@ end
 
 local function ItemCount(id)
     local getter = C_Item and C_Item.GetItemCount or GetItemCount
-    if not getter then return 0 end
-    local ok, count = pcall(getter, id, false, false)
-    if ok and Safe(count) and type(count) == "number" then return math.max(0, count) end
-    return 0
+    local count = 0
+    if getter then
+        local ok, result = pcall(getter, id, false, false)
+        if ok and Safe(result) and type(result) == "number" then count = math.max(0, result) end
+    end
+    if count > 0 then return count end
+    -- Some clients do not expose the current bag count through GetItemCount.
+    local slots = C_Container and C_Container.GetContainerNumSlots or GetContainerNumSlots
+    local itemID = C_Container and C_Container.GetContainerItemID or GetContainerItemID
+    local itemInfo = C_Container and C_Container.GetContainerItemInfo or GetContainerItemInfo
+    if not slots or not itemInfo then return count end
+    local bagCount = 0
+    for bag = 0, NUM_BAG_SLOTS or 4 do
+        local okSlots, number = pcall(slots, bag)
+        if okSlots and Safe(number) and type(number) == "number" then
+            for slot = 1, number do
+                local foundID
+                if itemID then
+                    local okID, value = pcall(itemID, bag, slot)
+                    if okID and Safe(value) then foundID = value end
+                end
+                local okInfo, info, legacyCount = pcall(itemInfo, bag, slot)
+                if okInfo and Safe(info) then
+                    if type(info) == "table" then
+                        foundID = foundID or info.itemID
+                        legacyCount = info.stackCount
+                    end
+                    if Safe(foundID) and foundID == id and Safe(legacyCount) and type(legacyCount) == "number" then
+                        bagCount = bagCount + legacyCount
+                    end
+                end
+            end
+        end
+    end
+    return math.max(count, bagCount)
 end
 
 local function ResolveItem(text)
@@ -348,7 +379,7 @@ local function FillFromItem(id, link)
     hoverElapsed = 0
     editor:Show()
     -- A bag click can clear edit-box focus after its secure click handler returns.
-    focusCountPending = true
+    focusCountPending = id
 end
 
 local function BagItemClicked(button, mouseButton)
@@ -500,10 +531,13 @@ local function CreateUI()
     button:SetScript("OnClick", AddGoal)
     editor:SetScript("OnUpdate", function(_, elapsed)
         if focusCountPending then
+            local id = focusCountPending
             focusCountPending = false
             -- Shift-click can open Blizzard's stack-splitting dialog after our bag hook.
             if StackSplitFrame and StackSplitFrame:IsShown() then StackSplitFrame:Hide() end
+            countBox:SetText(tostring(ItemCount(id)))
             countBox:SetFocus()
+            countBox:HighlightText()
         end
         if itemBox:HasFocus() or countBox:HasFocus() or MouseOver(editor) or MouseOver(handle) then
             hoverElapsed = 0

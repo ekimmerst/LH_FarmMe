@@ -6,7 +6,7 @@
 
 <ul>
   <li>Hover over the gold handle to open the goal editor. Enter an item name, item ID or item link, set a target quantity and click <strong>Farm Me!</strong>.</li>
-  <li>Use <strong>Alt + Shift + left click</strong> on an item in your bags to fill in its name automatically, then enter the target quantity. The shortcut can be changed or disabled.</li>
+  <li>Use <strong>Alt + Shift + left click</strong> on an item in your bags to fill in its name and current bag quantity automatically. The quantity field is focused and selected so you can immediately replace it with a target. The shortcut can be changed or disabled.</li>
   <li>Track several items at once. Goals are sorted by item name and saved per character.</li>
   <li>Show each item's icon, name and collected quantity on a progress bar. Hover over the icon for the normal item tooltip.</li>
   <li>Keep every progress bar at the width needed by the longest name and quantity, up to the available space. The bars are centered below the handle with a small gap between goals.</li>
@@ -45,6 +45,13 @@
 <p><strong>LH Tweaks is required.</strong> Place the <code>LH_FarmMe</code> folder beside <code>LH_Tweaks</code> in <code>World of Warcraft/_forever_/Interface/AddOns</code> and restart the game. LH Fishing, LH Range and LH Socials are not required; the progress-bar texture is included with LH FarmMe.</p>
 
 <h2 style="color: #73c9c4;">Changelog</h2>
+
+<p><strong>1.0.1 - Forever and Retail</strong></p>
+
+<ul>
+  <li>Prefill the target quantity with the current total across bag stacks when using the inventory shortcut. Focus and select that quantity after Blizzard's stack-splitting dialog closes.</li>
+  <li>Read bag slots directly when the client's item-count API does not provide the current quantity.</li>
+</ul>
 
 <p><strong>1.0.0 - Initial release</strong></p>
 
