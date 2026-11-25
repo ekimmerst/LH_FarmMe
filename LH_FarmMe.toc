@@ -1,0 +1,13 @@
+## Interface: 16001, 120105
+## Dependencies: LH_Tweaks
+## Title: LH FarmMe
+## Group: LH_Tweaks
+## X-Part-Of: LH_Tweaks
+## IconTexture: Interface\AddOns\LH_Tweaks\Icon.tga
+## Notes: Track item farming goals with compact progress bars.
+## Author: LH_FarmMe
+## Version: 1.0.0
+## SavedVariablesPerCharacter: LH_FarmMeDB
+
+LH_FarmMe.lua
+Settings.lua
